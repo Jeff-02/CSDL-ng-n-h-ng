@@ -1,0 +1,269 @@
+USE QuanLyNganHang;
+CREATE TABLE NganHang (
+    MaNganHang CHAR(10) PRIMARY KEY,
+    Ten VARCHAR(100) NOT NULL,
+    TruSo VARCHAR(150),
+    DiaChi VARCHAR(150),
+    DT_LienHe VARCHAR(15),
+    Web VARCHAR(100)
+);
+CREATE TABLE ChiNhanh (
+    MaChiNhanh CHAR(10) PRIMARY KEY,
+    Ten VARCHAR(100) NOT NULL,
+    DT_LienHe VARCHAR(15),
+    MaNganHang CHAR(10),
+    FOREIGN KEY (MaNganHang) REFERENCES NganHang(MaNganHang)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE KhachHang (
+    MaKhachHang CHAR(10) PRIMARY KEY,
+    HoTen VARCHAR(100) NOT NULL,
+    GioiTinh CHAR(3) CHECK (GioiTinh IN ('Nam', 'Nữ', 'Khác')),
+    CCCD CHAR(12) UNIQUE NOT NULL,
+    DiaChi VARCHAR(150),
+    LoaiKhachHang VARCHAR(50),
+    SDT VARCHAR(15),
+    Email VARCHAR(100)
+);
+CREATE TABLE NhanVien (
+    MaNhanVien CHAR(10) PRIMARY KEY,
+    HoTen VARCHAR(100) NOT NULL,
+    CCCD CHAR(12) UNIQUE,
+    DiaChi VARCHAR(150),
+    SDT VARCHAR(15),
+    Email VARCHAR(100),
+    MaChiNhanh CHAR(10),
+    FOREIGN KEY (MaChiNhanh) REFERENCES ChiNhanh(MaChiNhanh)
+        ON DELETE SET NULL ON UPDATE CASCADE
+);
+CREATE TABLE TaiKhoan (
+    SoTaiKhoan CHAR(15) PRIMARY KEY,
+    LoaiTaiKhoan VARCHAR(50),
+    NgayMo DATE NOT NULL,
+    SoDuHienTai DECIMAL(15,2) CHECK (SoDuHienTai >= 0),
+    MaKhachHang CHAR(10),
+    FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE GiaoDich (
+    MaGiaoDich CHAR(10) PRIMARY KEY,
+    SoTien DECIMAL(15,2) CHECK (SoTien > 0),
+    ThoiGian DATETIME NOT NULL,
+    TKGui CHAR(15),
+    TKNhan CHAR(15),
+    SoLanGiaoDich INT CHECK (SoLanGiaoDich >= 1),
+    BienDongSoDu DECIMAL(15,2),
+    HinhThuc VARCHAR(50) CHECK (HinhThuc IN ('Nap tien', 'Rut tien', 'Chuyen khoan')),
+    MaNhanVien CHAR(10),
+    FOREIGN KEY (TKGui) REFERENCES TaiKhoan(SoTaiKhoan)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (TKNhan) REFERENCES TaiKhoan(SoTaiKhoan)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien)
+        ON DELETE SET NULL ON UPDATE CASCADE
+);
+INSERT INTO NganHang (MaNganHang, Ten, TruSo, DiaChi, DT_LienHe, Web)
+VALUES
+('NH001', 'Vietcombank', 'Hà Nội', '198 Trần Quang Khải, Hoàn Kiếm', '1900545411', 'https://vietcombank.com.vn'),
+('NH002', 'BIDV', 'Hà Nội', '35 Hàng Vôi, Hoàn Kiếm', '19009247', 'https://bidv.com.vn'),
+('NH003', 'Agribank', 'Hà Nội', '2A Giảng Võ, Đống Đa', '1900558818', 'https://agribank.com.vn'),
+('NH004', 'VietinBank', 'Hà Nội', '108 Trần Hưng Đạo, Hoàn Kiếm', '1900558868', 'https://vietinbank.vn'),
+('NH005', 'Techcombank', 'Hà Nội', '191 Bà Triệu, Hai Bà Trưng', '1800588822', 'https://techcombank.com.vn'),
+('NH006', 'ACB', 'TP.HCM', '442 Nguyễn Thị Minh Khai, Quận 3', '1900545486', 'https://acb.com.vn'),
+('NH007', 'Sacombank', 'TP.HCM', '266-268 Nam Kỳ Khởi Nghĩa, Quận 3', '1900555588', 'https://sacombank.com.vn'),
+('NH008', 'MB Bank', 'Hà Nội', '63 Lê Văn Lương, Thanh Xuân', '1900545426', 'https://mbbank.com.vn'),
+('NH009', 'TPBank', 'Hà Nội', '57 Lý Thường Kiệt, Hoàn Kiếm', '1900585885', 'https://tpb.vn'),
+('NH010', 'VPBank', 'Hà Nội', '89 Láng Hạ, Đống Đa', '1900545415', 'https://vpbank.com.vn'),
+('NH011', 'VIB', 'TP.HCM', '111A Pasteur, Quận 3', '18008192', 'https://vib.com.vn'),
+('NH012', 'OCB', 'TP.HCM', '41-45 Lê Duẩn, Quận 1', '18006678', 'https://ocb.com.vn'),
+('NH013', 'Eximbank', 'TP.HCM', '7 Lê Thị Hồng Gấm, Quận 1', '18001199', 'https://eximbank.com.vn'),
+('NH014', 'SHB', 'Hà Nội', '77 Trần Hưng Đạo, Hoàn Kiếm', '1800588856', 'https://shb.com.vn'),
+('NH015', 'SCB', 'TP.HCM', '927 Trần Hưng Đạo, Quận 5', '19006538', 'https://scb.com.vn');
+INSERT INTO ChiNhanh (MaChiNhanh, Ten, DT_LienHe, MaNganHang)
+VALUES
+('CN001', 'Vietcombank Hà Nội', '02438245757', 'NH001'),
+('CN002', 'Vietcombank Đà Nẵng', '02363727777', 'NH001'),
+('CN003', 'BIDV Hải Phòng', '02253215555', 'NH002'),
+('CN004', 'Agribank Hà Nội', '02437727777', 'NH003'),
+('CN005', 'VietinBank HCM', '02839200000', 'NH004'),
+('CN006', 'Techcombank HCM', '02838328282', 'NH005'),
+('CN007', 'ACB Quận 1', '02839212345', 'NH006'),
+('CN008', 'Sacombank Quận 3', '02839393939', 'NH007'),
+('CN009', 'MB Đống Đa', '02437666666', 'NH008'),
+('CN010', 'TPBank HCM', '02838380000', 'NH009'),
+('CN011', 'VPBank Hải Phòng', '02253228888', 'NH010'),
+('CN012', 'VIB Đà Nẵng', '02363636363', 'NH011'),
+('CN013', 'OCB Quận 1', '02839123456', 'NH012'),
+('CN014', 'Eximbank Tân Bình', '02838668686', 'NH013'),
+('CN015', 'SHB Quảng Ninh', '02033845678', 'NH014');
+INSERT INTO KhachHang (MaKhachHang, HoTen, GioiTinh, CCCD, DiaChi, LoaiKhachHang, SDT, Email)
+VALUES
+('KH001', 'Nguyễn Văn A', 'Nam', '001203456789', 'Hà Nội', 'Cá nhân', '0912345678', 'a.nguyen@email.com'),
+('KH002', 'Trần Thị B', 'Nữ', '002304567891', 'Hải Phòng', 'Doanh nghiệp', '0934567890', 'b.tran@email.com'),
+('KH003', 'Lê Văn C', 'Nam', '003405678912', 'Đà Nẵng', 'Cá nhân', '0945678901', 'c.le@email.com'),
+('KH004', 'Phạm Thị D', 'Nữ', '004506789123', 'HCM', 'Doanh nghiệp', '0956789012', 'd.pham@email.com'),
+('KH005', 'Đỗ Văn E', 'Nam', '005607891234', 'Hà Nội', 'Cá nhân', '0967890123', 'e.do@email.com'),
+('KH006', 'Ngô Thị F', 'Nữ', '006708912345', 'HCM', 'Cá nhân', '0978901234', 'f.ngo@email.com'),
+('KH007', 'Bùi Văn G', 'Nam', '007809123456', 'Đà Nẵng', 'Cá nhân', '0989012345', 'g.bui@email.com'),
+('KH008', 'Lý Thị H', 'Nữ', '008901234567', 'Huế', 'Doanh nghiệp', '0911223344', 'h.ly@email.com'),
+('KH009', 'Trịnh Văn I', 'Nam', '009012345678', 'Hà Nội', 'Cá nhân', '0922334455', 'i.trinh@email.com'),
+('KH010', 'Mai Thị K', 'Nữ', '010123456789', 'Quảng Ninh', 'Cá nhân', '0933445566', 'k.mai@email.com'),
+('KH011', 'Vũ Văn L', 'Nam', '011234567890', 'HCM', 'Doanh nghiệp', '0944556677', 'l.vu@email.com'),
+('KH012', 'Dương Thị M', 'Nữ', '012345678901', 'Bình Dương', 'Cá nhân', '0955667788', 'm.duong@email.com'),
+('KH013', 'Hoàng Văn N', 'Nam', '013456789012', 'Hà Nam', 'Cá nhân', '0966778899', 'n.hoang@email.com'),
+('KH014', 'Cao Thị O', 'Nữ', '014567890123', 'Thanh Hóa', 'Doanh nghiệp', '0977889900', 'o.cao@email.com'),
+('KH015', 'Tạ Văn P', 'Nam', '015678901234', 'Hải Dương', 'Cá nhân', '0988990011', 'p.ta@email.com');
+INSERT INTO NhanVien (MaNhanVien, HoTen, CCCD, DiaChi, SDT, Email, MaChiNhanh)
+VALUES
+('NV001', 'Nguyễn Thị Thanh', '101001001', 'Hà Nội', '0901000001', 'thanh.nguyen@bank.vn', 'CN001'),
+('NV002', 'Trần Văn Minh', '101001002', 'Hà Nội', '0901000002', 'minh.tran@bank.vn', 'CN001'),
+('NV003', 'Phạm Thị Hòa', '101001003', 'Hải Phòng', '0901000003', 'hoa.pham@bank.vn', 'CN003'),
+('NV004', 'Lê Văn Hải', '101001004', 'Đà Nẵng', '0901000004', 'hai.le@bank.vn', 'CN004'),
+('NV005', 'Bùi Thị Mai', '101001005', 'HCM', '0901000005', 'mai.bui@bank.vn', 'CN005'),
+('NV006', 'Hoàng Văn Hưng', '101001006', 'HCM', '0901000006', 'hung.hoang@bank.vn', 'CN006'),
+('NV007', 'Đặng Thị Lan', '101001007', 'Đà Nẵng', '0901000007', 'lan.dang@bank.vn', 'CN007'),
+('NV008', 'Vũ Văn Cường', '101001008', 'Hà Nội', '0901000008', 'cuong.vu@bank.vn', 'CN008'),
+('NV009', 'Nguyễn Thị Hạnh', '101001009', 'Huế', '0901000009', 'hanh.nguyen@bank.vn', 'CN009'),
+('NV010', 'Trịnh Văn Tú', '101001010', 'Hải Phòng', '0901000010', 'tu.trinh@bank.vn', 'CN010'),
+('NV011', 'Lương Thị Trang', '101001011', 'Hà Nội', '0901000011', 'trang.luong@bank.vn', 'CN011'),
+('NV012', 'Dương Văn Dũng', '101001012', 'Quảng Ninh', '0901000012', 'dung.duong@bank.vn', 'CN012'),
+('NV013', 'Nguyễn Thị Hoa', '101001013', 'HCM', '0901000013', 'hoa.nguyen@bank.vn', 'CN013'),
+('NV014', 'Cao Văn Thịnh', '101001014', 'HCM', '0901000014', 'thinh.cao@bank.vn', 'CN014'),
+('NV015', 'Tạ Thị Nhàn', '101001015', 'Đà Nẵng', '0901000015', 'nhan.ta@bank.vn', 'CN015');
+INSERT INTO TaiKhoan (SoTaiKhoan, LoaiTaiKhoan, NgayMo, SoDuHienTai, MaKhachHang)
+VALUES
+('TK001', 'Tiết kiệm', '2024-01-01', 20000000, 'KH001'),
+('TK002', 'Thanh toán', '2024-02-10', 5000000, 'KH001'),
+('TK003', 'Tiết kiệm', '2024-03-15', 10000000, 'KH002'),
+('TK004', 'Doanh nghiệp', '2024-01-20', 70000000, 'KH003'),
+('TK005', 'Tiết kiệm', '2024-04-05', 3000000, 'KH004'),
+('TK006', 'Thanh toán', '2024-03-10', 25000000, 'KH005'),
+('TK007', 'Doanh nghiệp', '2024-02-20', 99000000, 'KH006'),
+('TK008', 'Vãng lai', '2024-05-01', 5500000, 'KH007'),
+('TK009', 'Thanh toán', '2024-04-22', 16000000, 'KH008'),
+('TK010', 'Tiết kiệm', '2024-06-10', 22000000, 'KH009'),
+('TK011', 'Doanh nghiệp', '2024-06-15', 500000000, 'KH010'),
+('TK012', 'Vãng lai', '2024-07-01', 4500000, 'KH011'),
+('TK013', 'Tiết kiệm', '2024-01-11', 1200000, 'KH012'),
+('TK014', 'Thanh toán', '2024-05-17', 2500000, 'KH013'),
+('TK015', 'Tiết kiệm', '2024-03-03', 4700000, 'KH014');
+INSERT INTO GiaoDich (MaGiaoDich, SoTien, ThoiGian, TKGui, TKNhan, SoLanGiaoDich, BienDongSoDu, HinhThuc, MaNhanVien)
+VALUES
+('GD001', 1000000, '2024-06-01 10:00:00', 'TK001', 'TK003', 1, -1000000, 'Chuyển khoản', 'NV001'),
+('GD002', 500000, '2024-06-02 12:30:00', 'TK002', NULL, 2, -500000, 'Rút tiền', 'NV002'),
+('GD003', 700000, '2024-06-03 15:45:00', NULL, 'TK004', 1, 700000, 'Nạp tiền', 'NV003'),
+('GD004', 3000000, '2024-06-04 08:20:00', 'TK005', 'TK006', 1, -3000000, 'Chuyển khoản', 'NV004'),
+('GD005', 2000000, '2024-06-05 11:10:00', NULL, 'TK007', 1, 2000000, 'Nạp tiền', 'NV005'),
+('GD006', 1000000, '2024-06-06 14:00:00', 'TK008', NULL, 1, -1000000, 'Rút tiền', 'NV006'),
+('GD007', 1500000, '2024-06-07 09:30:00', 'TK009', 'TK010', 1, -1500000, 'Chuyển khoản', 'NV007'),
+('GD008', 300000, '2024-06-08 16:00:00', NULL, 'TK011', 1, 300000, 'Nạp tiền', 'NV008'),
+('GD009', 800000, '2024-06-09 10:15:00', 'TK012', NULL, 1, -800000, 'Rút tiền', 'NV009'),
+('GD010', 500000, '2024-06-10 13:45:00', 'TK013', 'TK014', 1, -500000, 'Chuyển khoản', 'NV010'),
+('GD011', 1000000, '2024-06-11 17:20:00', 'TK015', NULL, 1, -1000000, 'Rút tiền', 'NV011'),
+('GD012', 200000, '2024-06-12 08:10:00', NULL, 'TK001', 1, 200000, 'Nạp tiền', 'NV012'),
+('GD013', 4000000, '2024-06-13 09:50:00', 'TK003', 'TK005', 1, -4000000, 'Chuyển khoản', 'NV013'),
+('GD014', 600000, '2024-06-14 11:30:00', NULL, 'TK006', 1, 600000, 'Nạp tiền', 'NV014'),
+('GD015', 1200000, '2024-06-15 15:40:00', 'TK007', NULL, 1, -1200000, 'Rút tiền', 'NV015');
+
+Thêm khách hàng mới
+INSERT INTO KhachHang (MaKhachHang, HoTen, GioiTinh, CCCD, DiaChi, LoaiKhachHang, SDT, Email)
+VALUES ('KH016', 'Phạm Minh Thư', 'Nữ', '101001016', 'HCM', 'Cá nhân', '0901010016', 'thu.pham@bank.vn');
+INSERT INTO TaiKhoan (SoTaiKhoan, LoaiTaiKhoan, NgayMo, SoDuHienTai, MaKhachHang)
+VALUES ('TK016', 'Thanh toán', '2025-07-01', 3000000, 'KH016');
+INSERT INTO ChiNhanh (MaChiNhanh, Ten, DT_LienHe, MaNganHang)
+VALUES ('CN016', 'Chi nhánh Vũng Tàu', '02543888888', 'NH001');
+INSERT INTO NhanVien (MaNhanVien, HoTen, CCCD, DiaChi, SDT, Email, MaChiNhanh)
+VALUES ('NV016', 'Lê Minh Trí', '101001017', 'Bà Rịa', '0901999916', 'tri.le@bank.vn', 'CN016');
+INSERT INTO GiaoDich (MaGiaoDich, SoTien, ThoiGian, TKGui, TKNhan, SoLanGiaoDich, BienDongSoDu, HinhThuc, MaNhanVien)
+VALUES ('GD016', 500000, '2025-07-01 09:00:00', 'TK016', NULL, 1, -500000, 'Rút tiền', 'NV016');
+
+Cập nhật dữ liệu
+UPDATE TaiKhoan
+SET SoDuHienTai = SoDuHienTai + 200000
+WHERE SoTaiKhoan = 'TK001';
+UPDATE KhachHang
+SET SDT = '0901234567'
+WHERE MaKhachHang = 'KH002';
+UPDATE ChiNhanh
+SET DT_LienHe = '02438889999'
+WHERE MaChiNhanh = 'CN001';
+UPDATE NhanVien
+SET Email = 'hoapham@bank.vn'
+WHERE MaNhanVien = 'NV003';
+UPDATE TaiKhoan
+SET LoaiTaiKhoan = 'Vãng lai'
+WHERE SoTaiKhoan = 'TK005';
+
+Xóa giao dịch GD016
+DELETE FROM GiaoDich
+WHERE MaGiaoDich = 'GD016';
+DELETE FROM TaiKhoan
+WHERE SoTaiKhoan = 'TK016';
+DELETE FROM KhachHang
+WHERE MaKhachHang = 'KH016';
+DELETE FROM NhanVien
+WHERE MaNhanVien = 'NV016';
+DELETE FROM ChiNhanh
+WHERE MaChiNhanh = 'CN016';
+
+Danh sách tất cả khách hàng
+SELECT * FROM KhachHang;
+
+Danh sách tài khoản có số dư > 10 triệu
+SELECT SoTaiKhoan, SoDuHienTai FROM TaiKhoan
+WHERE SoDuHienTai > 10000000;
+
+Lấy thông tin nhân viên ở chi nhánh CN001
+SELECT * FROM NhanVien WHERE MaChiNhanh = 'CN001';
+
+Các giao dịch trên 2tr
+SELECT * FROM GiaoDich WHERE SoTien > 2000000
+
+Tất cả tài khoản tiết kiệm
+SELECT * FROM TaiKhoan WHERE LoaiTaiKhoan = 'Tiết kiệm';
+
+Tổng số tiền giao dịch mỗi tài khoản
+SELECT TK.SoTaiKhoan, SUM(GD.SoTien) AS TongTien
+FROM TaiKhoan TK
+JOIN GiaoDich GD ON TK.SoTaiKhoan = GD.TKGui
+GROUP BY TK.SoTaiKhoan;
+
+Số giao dịch mỗi nhân viên thực hiện
+SELECT NV.HoTen, COUNT(GD.MaGiaoDich) AS SoGiaoDich
+FROM NhanVien NV
+JOIN GiaoDich GD ON NV.MaNhanVien = GD.MaNhanVien
+GROUP BY NV.HoTen;
+
+Mỗi khách hàng có bao nhiêu tài khoản
+SELECT KH.HoTen, COUNT(TK.SoTaiKhoan) AS SoTaiKhoan
+FROM KhachHang KH
+JOIN TaiKhoan TK ON KH.MaKhachHang = TK.MaKhachHang
+GROUP BY KH.HoTen;
+
+Tổng số tiền tính theo tài khoản
+SELECT TK.LoaiTaiKhoan, SUM(GD.SoTien) AS TongNap
+FROM TaiKhoan TK
+JOIN GiaoDich GD ON TK.SoTaiKhoan = GD.TKNhan
+WHERE GD.HinhThuc = 'Nạp tiền'
+GROUP BY TK.LoaiTaiKhoan
+HAVING SUM(GD.SoTien) > 1000000;
+
+Điếm số lượng tài khoản khách hàng >=2
+SELECT KH.HoTen, COUNT(TK.SoTaiKhoan) AS SoLuongTaiKhoan
+FROM KhachHang KH
+JOIN TaiKhoan TK ON KH.MaKhachHang = TK.MaKhachHang
+GROUP BY KH.HoTen
+HAVING SoLuongTaiKhoan >= 2;
+
+
+
+
+
+
+
+
+
+
+
+
+
