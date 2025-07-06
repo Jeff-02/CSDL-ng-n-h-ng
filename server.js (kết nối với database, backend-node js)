@@ -1,0 +1,82 @@
+const express = require('express');
+const mysql = require('mysql2/promise'); 
+const cors = require('cors');
+const app = express();
+
+const db = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'QuanLyNganHang'
+});
+
+app.use(express.json());
+app.use(express.static('public')); 
+app.use(cors()); 
+
+async function getBanks() {
+  const [rows] = await db.query('SELECT * FROM NganHang');
+  return rows;
+}
+
+async function addBank(bankData) {
+  await db.query(
+    'INSERT INTO NganHang SET ?',
+    bankData
+  );
+}
+
+async function updateBank(id, bankData) {
+  await db.query(
+    'UPDATE NganHang SET ? WHERE MaNganHang = ?',
+    [bankData, id]
+  );
+}
+
+async function deleteBank(id) {
+  await db.query(
+    'DELETE FROM NganHang WHERE MaNganHang = ?',
+    [id]
+  );
+}
+
+app.get('/api/banks', async (req, res) => {
+  try {
+    const banks = await getBanks();
+    res.json(banks);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+app.post('/api/banks', async (req, res) => {
+  try {
+    await addBank(req.body);
+    res.status(201).send('Thêm thành công');
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+app.put('/api/banks/:id', async (req, res) => {
+  try {
+    await updateBank(req.params.id, req.body);
+    res.send('Cập nhật thành công');
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+app.delete('/api/banks/:id', async (req, res) => {
+  try {
+    await deleteBank(req.params.id);
+    res.send('Xóa thành công');
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server đang chạy tại http://localhost:${PORT}`);
+});
