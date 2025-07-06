@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Ngân hàng</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-university"></i> QUẢN LÝ NGÂN HÀNG</h1>
+        
+        <div class="form-container">
+            <h2>Thông tin Ngân hàng</h2>
+            <form id="nganHangForm">
+                <div class="form-group">
+                    <label for="maNganHang">Mã ngân hàng:</label>
+                    <input type="text" id="maNganHang" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tenNganHang">Tên ngân hàng:</label>
+                    <input type="text" id="tenNganHang" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="truSo">Trụ sở:</label>
+                    <input type="text" id="truSo">
+                </div>
+                
+                <div class="form-group">
+                    <label for="diaChi">Địa chỉ:</label>
+                    <input type="text" id="diaChi">
+                </div>
+                
+                <div class="form-group">
+                    <label for="dtLienHe">Điện thoại liên hệ:</label>
+                    <input type="text" id="dtLienHe">
+                </div>
+                
+                <div class="form-group">
+                    <label for="website">Website:</label>
+                    <input type="text" id="website">
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" id="btnThem"><i class="fas fa-plus"></i> Thêm mới</button>
+                    <button type="button" id="btnSua"><i class="fas fa-edit"></i> Cập nhật</button>
+                    <button type="button" id="btnXoa"><i class="fas fa-trash"></i> Xóa</button>
+                    <button type="reset" id="btnReset"><i class="fas fa-sync"></i> Làm mới</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Tìm kiếm ngân hàng...">
+            <button id="btnSearch"><i class="fas fa-search"></i> Tìm kiếm</button>
+        </div>
+        
+        <div class="table-container">
+            <table id="nganHangTable">
+                <thead>
+                    <tr>
+                        <th>Mã NH</th>
+                        <th>Tên ngân hàng</th>
+                        <th>Trụ sở</th>
+                        <th>Địa chỉ</th>
+                        <th>Điện thoại</th>
+                        <th>Website</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
