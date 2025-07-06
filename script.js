@@ -10,7 +10,7 @@ async function loadBanks() {
       throw new Error("Không thể kết nối tới server.");
     }
     const banks = await response.json();
-    renderBanks(banks); // Gọi hàm để vẽ lại bảng
+    renderBanks(banks); 
   } catch (error) {
     console.error("Lỗi khi tải danh sách ngân hàng:", error);
     alert("Có lỗi xảy ra khi tải dữ liệu từ server.");
@@ -62,11 +62,9 @@ async function updateBank(id, bankData) {
 }
 
 async function deleteBank(id) {
-  // Xác nhận trước khi xóa
   if (!confirm(`Bạn có chắc chắn muốn xóa ngân hàng có mã "${id}" không?`)) {
     return;
   }
-
   try {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "DELETE",
@@ -89,20 +87,17 @@ async function deleteBank(id) {
 function getBankDataFromForm() {
   return {
     MaNganHang: document.getElementById("maNganHang").value.trim(),
-    Ten: document.getElementById("tenNganHang").value.trim(), // Đảm bảo đúng tên trường
+    Ten: document.getElementById("tenNganHang").value.trim(), 
     TruSo: document.getElementById("truSo").value.trim(),
     DiaChi: document.getElementById("diaChi").value.trim(),
     DT_LienHe: document.getElementById("dtLienHe").value.trim(),
     Web: document.getElementById("website").value.trim(),
   };
 }
-/**
- * 2. Hiển thị danh sách ngân hàng ra bảng
- * @param {Array} banks - Mảng đối tượng ngân hàng
- */
+
 function renderBanks(banks) {
   const tableBody = document.getElementById("tableBody");
-  tableBody.innerHTML = ""; // Xóa hết dữ liệu cũ trong bảng
+  tableBody.innerHTML = ""; 
 
   if (!banks || banks.length === 0) {
     tableBody.innerHTML =
@@ -111,7 +106,6 @@ function renderBanks(banks) {
   }
 
   banks.forEach((bank) => {
-    // Tạo một hàng mới cho mỗi ngân hàng
     const row = document.createElement("tr");
     row.innerHTML = `
             <td>${bank.MaNganHang}</td>
@@ -126,7 +120,6 @@ function renderBanks(banks) {
             </td>
         `;
 
-    // Gán sự kiện cho nút Sửa và Xóa trên từng hàng
     row
       .querySelector(".edit-btn")
       .addEventListener("click", () => fillFormForUpdate(bank));
@@ -146,10 +139,7 @@ function fillFormForUpdate(bank) {
   document.getElementById("dtLienHe").value = bank.DT_LienHe || "";
   document.getElementById("website").value = bank.Web || "";
 
-  // Khi sửa, không cho phép thay đổi Mã Ngân hàng (khóa chính)
   document.getElementById("maNganHang").readOnly = true;
-
-  // Cuộn lên đầu trang để người dùng thấy form đã được điền
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -176,11 +166,11 @@ document.getElementById("btnSua").addEventListener("click", () => {
     return;
   }
   const dataToUpdate = {
-    Ten: bankData.Ten, // Sửa từ TenNganHang → Ten
+    Ten: bankData.Ten, 
     TruSo: bankData.TruSo,
     DiaChi: bankData.DiaChi,
     DT_LienHe: bankData.DT_LienHe,
-    Web: bankData.Web, // Sửa từ Website → Web
+    Web: bankData.Web, 
   };
   updateBank(bankData.MaNganHang, dataToUpdate);
 });
